@@ -60,7 +60,9 @@ const RouteReportPage = () => {
           headers: { Accept: 'application/json' },
         });
         if (response.ok) {
-          setItems(await response.json());
+          const itemst = await response.json();
+          setItems(itemst);
+          setSelectedItem(itemst[0]);
         } else {
           throw Error(await response.text());
         }
@@ -121,7 +123,7 @@ const RouteReportPage = () => {
             </TableHead>
             <TableBody>
               {!loading ? items.slice(0, 4000).map((item) => (
-                <TableRow key={item.id}>
+                <TableRow key={item.id} onClick={() => setSelectedItem(item)} style={{ backgroundColor: (selectedItem === item ? 'red' : 'transparent') }}>
                   <TableCell className={classes.columnAction} padding="none">
                     {selectedItem === item ? (
                       <IconButton size="small" onClick={() => setSelectedItem(null)}>
