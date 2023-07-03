@@ -1,12 +1,8 @@
 import { useId, useCallback, useEffect } from 'react';
-import { useTheme } from '@mui/styles';
 import { map } from './core/MapView';
 
 const MapPositions = ({ positions, onClick }) => {
   const id = useId();
-
-  const theme = useTheme();
-
   const onMouseEnter = () => map.getCanvas().style.cursor = 'pointer';
   const onMouseLeave = () => map.getCanvas().style.cursor = '';
 
@@ -14,7 +10,7 @@ const MapPositions = ({ positions, onClick }) => {
     event.preventDefault();
     const feature = event.features[0];
     if (onClick) {
-      onClick(feature.properties.id, feature.properties.index);
+      onClick(feature.properties.id, feature.properties.index, map);
     }
   }, [onClick]);
 
@@ -28,11 +24,16 @@ const MapPositions = ({ positions, onClick }) => {
     });
     map.addLayer({
       id,
-      type: 'circle',
+      type: 'symbol',
       source: id,
+      layout: {
+        'icon-image': 'arrow', // Assuming you have an arrow icon registered in your map resources
+        'icon-rotate': ['get', 'course'], // Adjust the rotation to orient the arrow correctly
+        'icon-size': 0.9,
+        'icon-allow-overlap': true,
+      },
       paint: {
-        'circle-radius': 5,
-        'circle-color': theme.palette.colors.geometry,
+        'icon-opacity': 1,
       },
     });
 
@@ -66,6 +67,7 @@ const MapPositions = ({ positions, onClick }) => {
         properties: {
           index,
           id: position.id,
+          course: position.course,
         },
       })),
     });
