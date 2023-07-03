@@ -137,6 +137,7 @@ const MainPage = () => {
           <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
             <DeviceList devices={filteredDevices} />
           </Paper>
+
         </div>
         {desktop && (
           <div className={classes.footer}>
