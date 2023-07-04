@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, {
   useState, useCallback, useEffect,
 } from 'react';
+import { Popup } from 'maplibre-gl';
 import { Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
@@ -8,7 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
 import BottomMenu from '../common/components/BottomMenu';
-import StatusCard from '../common/components/StatusCard';
+// import StatusCard from '../common/components/StatusCard';
 import { devicesActions } from '../store';
 import usePersistedState from '../common/util/usePersistedState';
 import EventsDrawer from './EventsDrawer';
@@ -16,6 +18,9 @@ import useFilter from './useFilter';
 import MainToolbar from './MainToolbar';
 import MainMap from './MainMap';
 import { useAttributePreference } from '../common/util/preferences';
+
+import { createPopUp } from '../common/util/mapPopup';
+import { map } from '../map/core/MapView';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,6 +104,15 @@ const MainPage = () => {
 
   useFilter(keyword, filter, filterSort, filterMap, positions, setFilteredDevices, setFilteredPositions);
 
+  if (selectedPosition) {
+    console.log(selectedPosition);
+    Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
+    new Popup()
+      .setMaxWidth('400px')
+      .setHTML(createPopUp(selectedPosition))
+      .setLngLat([selectedPosition.longitude, selectedPosition.latitude])
+      .addTo(map);
+  }
   return (
     <div className={classes.root}>
       {desktop && (
@@ -146,14 +160,14 @@ const MainPage = () => {
         )}
       </div>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
-      {selectedDeviceId && (
+      {/* {selectedDeviceId && (
         <StatusCard
           deviceId={selectedDeviceId}
           position={selectedPosition}
           onClose={() => dispatch(devicesActions.selectId(null))}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
-      )}
+      )} */}
     </div>
   );
 };

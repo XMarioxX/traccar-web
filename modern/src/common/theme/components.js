@@ -33,4 +33,42 @@ export default {
       },
     },
   },
+  MuiToolbar: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#163b61',
+        color: 'white',
+      },
+    },
+  },
+  MuiSvgIcon: {
+    styleOverrides: {
+      root: {
+        color: 'white',
+      },
+    },
+  },
+  MuiBottomNavigation: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#163b61',
+        color: 'white',
+      },
+    },
+  },
+  MuiBottomNavigationAction: {
+    styleOverrides: {
+      root: {
+        color: 'white !important',
+      },
+    },
+  },
+  MuiBadge: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#163b61',
+        color: 'white',
+      },
+    },
+  },
 };

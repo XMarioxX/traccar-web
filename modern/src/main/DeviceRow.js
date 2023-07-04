@@ -1,8 +1,9 @@
 import React from 'react';
+import { Popup } from 'maplibre-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
-  IconButton, Tooltip, Avatar, ListItemAvatar, ListItemText, ListItemButton,
+  IconButton, Tooltip, ListItemText, ListItemButton,
 } from '@mui/material';
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
@@ -17,10 +18,10 @@ import {
   formatAlarm, formatBoolean, formatPercentage, formatStatus, getStatusColor,
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
-import { mapIconKey, mapIcons } from '../map/core/preloadImages';
 import { useAdministrator } from '../common/util/permissions';
 import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
+import { map } from '../map/core/MapView';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -92,14 +93,16 @@ const DeviceRow = ({ data, index, style }) => {
     <div style={style}>
       <ListItemButton
         key={item.id}
-        onClick={() => dispatch(devicesActions.selectId(item.id))}
+        onClick={() => {
+          dispatch(devicesActions.selectId(item.id));
+          Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
+          new Popup()
+            .setHTML('XD')
+            .setLngLat([position.longitude, position.latitude])
+            .addTo(map);
+        }}
         disabled={!admin && item.disabled}
       >
-        <ListItemAvatar>
-          <Avatar>
-            <img className={classes.icon} src={mapIcons[mapIconKey(item.category)]} alt="" />
-          </Avatar>
-        </ListItemAvatar>
         <ListItemText
           primary={formatProperty(devicePrimary)}
           primaryTypographyProps={{ noWrap: true }}

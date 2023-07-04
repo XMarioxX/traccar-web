@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
+import { Popup } from 'maplibre-gl';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
-import MapView from '../map/core/MapView';
+import MapView, { map } from '../map/core/MapView';
 import MapSelectedDevice from '../map/main/MapSelectedDevice';
 import MapAccuracy from '../map/main/MapAccuracy';
 import MapGeofence from '../map/MapGeofence';
@@ -18,6 +19,7 @@ import MapGeocoder from '../map/geocoder/MapGeocoder';
 import MapScale from '../map/MapScale';
 import MapNotification from '../map/notification/MapNotification';
 import useFeatures from '../common/util/useFeatures';
+import { createPopUp } from '../common/util/mapPopup';
 
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const theme = useTheme();
@@ -31,6 +33,13 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
 
   const onMarkerClick = useCallback((_, deviceId) => {
     dispatch(devicesActions.selectId(deviceId));
+    console.log(selectedPosition);
+    Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
+    new Popup()
+      .setMaxWidth('400px')
+      .setHTML(createPopUp(selectedPosition))
+      .setLngLat([selectedPosition.longitude, selectedPosition.latitude])
+      .addTo(map);
   }, [dispatch]);
 
   return (
