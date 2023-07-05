@@ -60,7 +60,7 @@ const MainToolbar = ({
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-        {devicesOpen ? <MapIcon /> : <ViewListIcon />}
+        {devicesOpen ? <MapIcon style={{ color: 'white' }} /> : <ViewListIcon />}
       </IconButton>
       <OutlinedInput
         ref={inputRef}
@@ -73,7 +73,7 @@ const MainToolbar = ({
           <InputAdornment position="end">
             <IconButton size="small" edge="end" onClick={() => setFilterAnchorEl(inputRef.current)}>
               <Badge color="info" variant="dot" invisible={!filter.statuses.length && !filter.groups.length}>
-                <TuneIcon fontSize="small" />
+                <TuneIcon style={{ color: 'black' }} fontSize="small" />
               </Badge>
             </IconButton>
           </InputAdornment>
@@ -168,7 +168,7 @@ const MainToolbar = ({
       </Popover>
       <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <AddIcon />
+          <AddIcon style={{ color: 'white' }} />
         </Tooltip>
       </IconButton>
     </Toolbar>

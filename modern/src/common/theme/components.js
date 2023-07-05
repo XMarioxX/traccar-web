@@ -18,6 +18,9 @@ export default {
       sizeMedium: {
         height: '40px',
       },
+      outlinedSecondary: {
+        color: 'red',
+      },
     },
   },
   MuiFormControl: {
@@ -37,14 +40,13 @@ export default {
     styleOverrides: {
       root: {
         backgroundColor: '#163b61',
-        color: 'white',
       },
     },
   },
   MuiSvgIcon: {
     styleOverrides: {
       root: {
-        color: 'white',
+        color: 'black',
       },
     },
   },
@@ -63,12 +65,5 @@ export default {
       },
     },
   },
-  MuiBadge: {
-    styleOverrides: {
-      root: {
-        backgroundColor: '#163b61',
-        color: 'white',
-      },
-    },
-  },
+
 };

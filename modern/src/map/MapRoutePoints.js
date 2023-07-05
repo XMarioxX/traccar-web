@@ -9,6 +9,7 @@ const MapPositions = ({ positions, onClick }) => {
   const onMarkerClick = useCallback((event) => {
     event.preventDefault();
     const feature = event.features[0];
+    console.log(feature);
     if (onClick) {
       onClick(feature.properties.id, feature.properties.index, map);
     }
