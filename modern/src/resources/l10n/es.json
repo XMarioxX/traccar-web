@@ -570,5 +570,7 @@
     "categoryVan": "Furgoneta",
     "categoryScooter": "Moto",
     "maintenanceStart": "Iniciar",
-    "maintenancePeriod": "Período"
+    "maintenancePeriod": "Período",
+    "subroutes": "Subrutas",
+    "settingsSchedules": "Itinerarios"
 }

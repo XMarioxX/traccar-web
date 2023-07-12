@@ -145,6 +145,7 @@ const Navigation = () => {
           <Route path="user/:id/connections" element={<UserConnectionsPage />} />
           <Route path="user/:id" element={<UserPage />} />
           <Route path="user" element={<UserPage />} />
+          <Route path="schedules" element={<UserPage />} />
         </Route>
 
         <Route path="reports">

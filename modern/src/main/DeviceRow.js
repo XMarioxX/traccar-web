@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popup } from 'maplibre-gl';
+// import { Popup } from 'maplibre-gl';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
@@ -21,7 +21,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAdministrator } from '../common/util/permissions';
 import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
-import { map } from '../map/core/MapView';
+// import { map } from '../map/core/MapView';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -95,11 +95,11 @@ const DeviceRow = ({ data, index, style }) => {
         key={item.id}
         onClick={() => {
           dispatch(devicesActions.selectId(item.id));
-          Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
-          new Popup()
-            .setHTML('XD')
-            .setLngLat([position.longitude, position.latitude])
-            .addTo(map);
+          // Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
+          // new Popup()
+          //   .setHTML('XD')
+          //   .setLngLat([position.longitude, position.latitude])
+          //   .addTo(map);
         }}
         disabled={!admin && item.disabled}
       >

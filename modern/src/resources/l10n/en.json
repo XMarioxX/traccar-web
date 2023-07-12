@@ -570,5 +570,12 @@
     "categoryVan": "Van",
     "categoryScooter": "Scooter",
     "maintenanceStart": "Start",
+<<<<<<< Updated upstream
     "maintenancePeriod": "Period"
 }
+=======
+    "maintenancePeriod": "Period",
+    "subroutes": "Subroutes",
+    "settingsSchedules": "Schedules"
+}
+>>>>>>> Stashed changes

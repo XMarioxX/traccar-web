@@ -13,6 +13,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import TodayIcon from '@mui/icons-material/Today';
 import PublishIcon from '@mui/icons-material/Publish';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
+import { ScheduleOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
@@ -84,6 +85,12 @@ const SettingsMenu = () => {
                 selected={location.pathname.startsWith('/settings/group')}
               />
             )}
+            <MenuItem
+              title={t('settingsSchedules')}
+              link="/settings/schedules"
+              icon={<ScheduleOutlined />}
+              selected={location.pathname.startsWith('/settings/schedule')}
+            />
             {!features.disableDrivers && (
               <MenuItem
                 title={t('sharedDrivers')}

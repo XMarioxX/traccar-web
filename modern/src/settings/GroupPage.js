@@ -16,6 +16,7 @@ import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttri
 import useGroupAttributes from '../common/attributes/useGroupAttributes';
 import { useCatch } from '../reactHelper';
 import { groupsActions } from '../store';
+import SubrutasList from './components/SubrutasList';
 
 const useStyles = makeStyles((theme) => ({
   details: {
@@ -46,7 +47,7 @@ const GroupPage = () => {
   });
 
   const validate = () => item && item.name;
-
+  console.log(item);
   return (
     <EditItemView
       endpoint="groups"
@@ -94,6 +95,21 @@ const GroupPage = () => {
             definitions={{ ...commonDeviceAttributes, ...groupAttributes }}
           />
         </>
+      )}
+      {item && item.id && (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="subtitle1">
+              {t('subroutes')}
+              {' '}
+              extra
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <SubrutasList group={item.id} />
+          </AccordionDetails>
+
+        </Accordion>
       )}
     </EditItemView>
   );

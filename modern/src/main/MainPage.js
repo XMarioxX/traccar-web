@@ -2,15 +2,16 @@
 import React, {
   useState, useCallback, useEffect,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Popup } from 'maplibre-gl';
-import { Paper } from '@mui/material';
+import { Box, Modal, Paper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
 import BottomMenu from '../common/components/BottomMenu';
-// import StatusCard from '../common/components/StatusCard';
+import StatusCard from '../common/components/StatusCard';
 import { devicesActions } from '../store';
 import usePersistedState from '../common/util/usePersistedState';
 import EventsDrawer from './EventsDrawer';
@@ -18,9 +19,20 @@ import useFilter from './useFilter';
 import MainToolbar from './MainToolbar';
 import MainMap from './MainMap';
 import { useAttributePreference } from '../common/util/preferences';
-
-import { createPopUp } from '../common/util/mapPopup';
+import { createPopUp, streetView, generateRoute } from '../common/util/mapPopup';
 import { map } from '../map/core/MapView';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -93,6 +106,9 @@ const MainPage = () => {
 
   const [devicesOpen, setDevicesOpen] = useState(desktop);
   const [eventsOpen, setEventsOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -105,14 +121,31 @@ const MainPage = () => {
   useFilter(keyword, filter, filterSort, filterMap, positions, setFilteredDevices, setFilteredPositions);
 
   if (selectedPosition) {
-    console.log(selectedPosition);
     Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
     new Popup()
       .setMaxWidth('400px')
       .setHTML(createPopUp(selectedPosition))
       .setLngLat([selectedPosition.longitude, selectedPosition.latitude])
       .addTo(map);
+    window.position = selectedPosition;
   }
+
+  useEffect(() => {
+    // Attach the function to the global window object
+    window.navigate = navigate;
+    window.streetView = streetView;
+    window.generateRoute = generateRoute;
+    window.position = selectedPosition;
+
+    // Clean up the function when the component unmounts
+    return () => {
+      delete window.navigate;
+      delete window.streetView;
+      delete window.position;
+      delete window.generateRoute;
+    };
+  }, []);
+
   return (
     <div className={classes.root}>
       {desktop && (
@@ -168,6 +201,21 @@ const MainPage = () => {
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
       )} */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   );
 };
