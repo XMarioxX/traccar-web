@@ -1,4 +1,5 @@
 {
+    "age": "Edad",
     "sharedLoading": "Cargando…",
     "sharedHide": "Ocultar",
     "sharedSave": "Guardar",
@@ -174,6 +175,7 @@
     "userFixedEmail": "No cambiar email",
     "userToken": "Token Acceso",
     "userDeleteAccount": "Borrar cuenta",
+    "license": "Licencia",
     "loginTitle": "Iniciar sesión",
     "loginLanguage": "Idioma",
     "loginReset": "Reiniciar contraseña",

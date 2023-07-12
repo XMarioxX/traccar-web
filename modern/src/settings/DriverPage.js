@@ -5,6 +5,8 @@ import {
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import { PhoneInput } from 'react-international-phone';
+// import 'react-international-phone/style.css';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -25,7 +27,17 @@ const DriverPage = () => {
 
   const [item, setItem] = useState();
 
-  const validate = () => item && item.name && item.uniqueId;
+  const validate = () => item && item.name && item.uniqueId && item.phone && item.age && item.license;
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    const numbersOnly = /^\d*$/; // Regex to allow only numbers
+
+    if (numbersOnly.test(value)) {
+      setItem({ ...item, [name]: value });
+    }
+  };
 
   return (
     <EditItemView
@@ -54,6 +66,25 @@ const DriverPage = () => {
                 value={item.uniqueId || ''}
                 onChange={(event) => setItem({ ...item, uniqueId: event.target.value })}
                 label={t('deviceIdentifier')}
+              />
+              <TextField
+                value={item.phone || ''}
+                onChange={handleInputChange}
+                label={t('commandPhone')}
+                name="phone"
+                inputProps={{ maxLength: 10 }}
+              />
+              <TextField
+                value={item.license || ''}
+                onChange={(event) => setItem({ ...item, license: event.target.value })}
+                label={t('license')}
+              />
+              <TextField
+                value={item.age || ''}
+                onChange={handleInputChange}
+                label={t('age')}
+                name="age"
+                inputProps={{ maxLength: 3 }}
               />
             </AccordionDetails>
           </Accordion>

@@ -1,4 +1,5 @@
 {
+    "age": "Age",
     "sharedLoading": "Loading...",
     "sharedHide": "Hide",
     "sharedSave": "Save",
@@ -174,6 +175,7 @@
     "userFixedEmail": "No Email Change",
     "userToken": "Token",
     "userDeleteAccount": "Delete Account",
+    "license": "License",
     "loginTitle": "Login",
     "loginLanguage": "Language",
     "loginReset": "Reset Password",

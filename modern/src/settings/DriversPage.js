@@ -32,6 +32,8 @@ const DriversPage = () => {
     setLoading(true);
     try {
       const response = await fetch('/api/drivers');
+      // eslint-disable-next-line no-console
+      console.log(response);
       if (response.ok) {
         setItems(await response.json());
       } else {
@@ -50,6 +52,9 @@ const DriversPage = () => {
           <TableRow>
             <TableCell>{t('sharedName')}</TableCell>
             <TableCell>{t('deviceIdentifier')}</TableCell>
+            <TableCell>{t('commandPhone')}</TableCell>
+            <TableCell>{t('license')}</TableCell>
+            <TableCell>{t('age')}</TableCell>
             <TableCell className={classes.columnAction} />
           </TableRow>
         </TableHead>
@@ -58,6 +63,9 @@ const DriversPage = () => {
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.uniqueId}</TableCell>
+              <TableCell>{item.phone}</TableCell>
+              <TableCell>{item.license}</TableCell>
+              <TableCell>{item.age}</TableCell>
               <TableCell className={classes.columnAction} padding="none">
                 <CollectionActions itemId={item.id} editPath="/settings/driver" endpoint="drivers" setTimestamp={setTimestamp} />
               </TableCell>
