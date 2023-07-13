@@ -1,5 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { List as Lista, ListItemButton, ListItemText, TextField, Button, Box } from '@mui/material';
+import {
+  List as Lista,
+  ListItemButton,
+  ListItemText,
+  TextField,
+  Button,
+  Box,
+} from '@mui/material';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 
 const SubrutasList = (props) => {
@@ -29,8 +36,7 @@ const SubrutasList = (props) => {
       body: JSON.stringify({ name: newItem, groupId: group }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         fetch('/api/subroutes')
           .then((response) => response.json())
           .then((data) => setData(data.filter((i) => i.groupId === group)));
@@ -61,8 +67,7 @@ const SubrutasList = (props) => {
       body: JSON.stringify({ ...editingItem, name: newItem }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         fetch('/api/subroutes')
           .then((response) => response.json())
           .then((data) => setData(data.filter((i) => i.groupId === group)));

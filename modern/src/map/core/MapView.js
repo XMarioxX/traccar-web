@@ -48,7 +48,6 @@ const initMap = async () => {
   updateReadyValue(true);
   map.loadImage('../images/arrow.png', (err, image) => {
     if (err) {
-      console.error('err image', err);
       return;
     }
     map.addImage('arrow', image);

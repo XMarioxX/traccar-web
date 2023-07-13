@@ -47,7 +47,7 @@ const GroupPage = () => {
   });
 
   const validate = () => item && item.name;
-  console.log(item);
+
   return (
     <EditItemView
       endpoint="groups"

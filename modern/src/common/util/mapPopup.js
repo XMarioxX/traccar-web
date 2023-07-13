@@ -15,24 +15,19 @@ window.makeRequest = async (url, method = 'GET', payload = null) => {
     options.body = JSON.stringify(payload);
   }
 
-  try {
-    const response = await fetch(url, options);
+  const response = await fetch(url, options);
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    if (response.status === 204) {
-      // No content to parse
-      return null;
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
   }
+
+  if (response.status === 204) {
+    // No content to parse
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
 };
 
 window.engineLock = () => {
@@ -50,14 +45,12 @@ window.engineLock = () => {
       maximize: 'remove',
     },
     callback: (panel) => {
-      console.log(panel);
       document.getElementById('myButton').addEventListener('click', async () => {
-        const res = await window.makeRequest('./api/commands/send', 'POST', {
+        await window.makeRequest('./api/commands/send', 'POST', {
           type: 'engineStop',
           attributes: {},
           deviceId: window.position.deviceId,
         });
-        console.log(res);
         panel.close();
       });
     },
@@ -79,10 +72,8 @@ window.engineReactivate = () => {
       maximize: 'remove',
     },
     callback: (panel) => {
-      console.log(panel);
-
       document.getElementById('myButton').addEventListener('click', async () => {
-        const res = await window.makeRequest('./api/commands/send', 'POST', {
+        await window.makeRequest('./api/commands/send', 'POST', {
           id: 0,
           attributes: {},
           deviceId: window.position.deviceId,
@@ -90,7 +81,6 @@ window.engineReactivate = () => {
           textChannel: false,
           description: null,
         });
-        console.log(res);
         panel.close();
       });
     },
@@ -109,7 +99,6 @@ export const generateRoute = () => {
 
 export const test = () => { generateRoute(); };
 export const createPopUp = (position) => {
-  console.log(position);
   let html = '';
   html += "<div align='center' style='text-align: center !important;text-transform: uppercase !important;'>";
   //   if (!Traccar.app.getUser().get('attributes').hasOwnProperty('ui.disableReport') || !Traccar.app.getUser().get('attributes')['ui.disableReport']) {
@@ -175,7 +164,7 @@ export const createPopUp = (position) => {
 
 export const streetView = () => {
   if (window.position.latitude != null && window.position.longitude != null) {
-    const streetviewPanel = window.jsPanel.create({
+    window.jsPanel.create({
       theme: {
         colorHeader: '#fff',
         bgPanel: 'rgb(49,80,126)',
@@ -192,9 +181,5 @@ export const streetView = () => {
       },
       top: '56px',
     });
-    if (isMobileDevice()) {
-      // streetviewPanel.maximize();
-      console.log(streetviewPanel);
-    }
   }
 };

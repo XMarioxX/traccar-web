@@ -107,7 +107,6 @@ const SchedulePage = () => {
     fetch('/api/subroutes')
       .then((response) => response.json())
       .then((data) => setSubrutas(data));
-    console.log(subrutas);
     setSubruta(item?.subrouteId);
   }, [item?.id]);
 
@@ -138,7 +137,6 @@ const SchedulePage = () => {
   };
 
   const updateSubruta = (evt) => {
-    console.log(evt);
     setSubruta(evt.target.value);
     setItem({
       ...item,
@@ -156,7 +154,6 @@ const SchedulePage = () => {
   });
 
   const validate = () => item && item.name && item.days && item.de && item.a && item.subrouteId;
-  console.log(validate);
   return (
     <EditItemView
       endpoint="itinerarios"
