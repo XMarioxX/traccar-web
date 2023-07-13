@@ -1,6 +1,7 @@
 {
     "name": "traccar-web",
     "dependencies": {
+        "dayjs": "^1.11.9",
         "extjs-gpl": "^6.2.0",
         "ol": "^6.12.0",
         "ol-layerswitcher": "^3.8.3",

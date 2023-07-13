@@ -54,6 +54,8 @@ import ScheduledPage from './reports/ScheduledPage';
 import DeviceConnectionsPage from './settings/DeviceConnectionsPage';
 import GroupConnectionsPage from './settings/GroupConnectionsPage';
 import UserConnectionsPage from './settings/UserConnectionsPage';
+import SchedulesPage from './settings/SchedulesPage';
+import SchedulePage from './settings/SchedulePage';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -145,7 +147,9 @@ const Navigation = () => {
           <Route path="user/:id/connections" element={<UserConnectionsPage />} />
           <Route path="user/:id" element={<UserPage />} />
           <Route path="user" element={<UserPage />} />
-          <Route path="schedules" element={<UserPage />} />
+          <Route path="schedules" element={<SchedulesPage />} />
+          <Route path="schedule/:id" element={<SchedulePage />} />
+          <Route path="schedule" element={<SchedulePage />} />
         </Route>
 
         <Route path="reports">

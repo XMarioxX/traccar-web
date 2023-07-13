@@ -572,5 +572,6 @@
     "maintenanceStart": "Iniciar",
     "maintenancePeriod": "Período",
     "subroutes": "Subrutas",
-    "settingsSchedules": "Itinerarios"
+    "settingsSchedules": "Itinerarios",
+    "scheduleDialog": "Itinerario"
 }
