@@ -47,16 +47,21 @@ const SchedulePage = () => {
 
   const newDateDe = new Date();
   const newDateA = new Date();
+  const newDateStart = new Date();
 
   const [item, setItem] = useState();
   const [hoursDe, minutesDe] = ((item?.de) || '00:00').split(':');
   const [hoursA, minutesA] = ((item?.a) || '00:00').split(':');
+  const [hoursStart, minutesStart] = ((item?.start) || '00:00').split(':');
   newDateDe.setHours(hoursDe);
   newDateDe.setMinutes(minutesDe);
   newDateA.setHours(hoursA);
   newDateA.setMinutes(minutesA);
+  newDateStart.setHours(hoursStart);
+  newDateStart.setMinutes(minutesStart);
   const [de, setDe] = useState(dayjs(newDateDe));
   const [a, setA] = useState(dayjs(newDateA));
+  const [start, setStart] = useState(dayjs(newDateStart));
 
   const binaryString = (item?.days ?? 0).toString(2).padStart(7, '0'); // Convert to binary and pad with leading zeros
 
@@ -80,8 +85,10 @@ const SchedulePage = () => {
     domingo,
   } = days;
 
-  const [subrutas, setSubrutas] = useState([{ id: 0, name: 'Elegir' }]);
+  const [subrutas, setSubrutas] = useState([]);
   const [subruta, setSubruta] = useState(0);
+  const [geofences, setGeofences] = useState([]);
+  const [geofence, setGeofence] = useState(0);
 
   const handleChange = (event) => {
     const newDays = {
@@ -90,35 +97,6 @@ const SchedulePage = () => {
     };
     setDays(newDays);
   };
-
-  useEffect(() => {
-    const initialDaysState = {
-      lunes: binaryString.charAt(6) === '1',
-      martes: binaryString.charAt(5) === '1',
-      miercoles: binaryString.charAt(4) === '1',
-      jueves: binaryString.charAt(3) === '1',
-      viernes: binaryString.charAt(2) === '1',
-      sabado: binaryString.charAt(1) === '1',
-      domingo: binaryString.charAt(0) === '1',
-    };
-    setDays(initialDaysState);
-    setDe(dayjs(newDateDe));
-    setA(dayjs(newDateA));
-    fetch('/api/subroutes')
-      .then((response) => response.json())
-      .then((data) => setSubrutas(data));
-    setSubruta(item?.subrouteId);
-  }, [item?.id]);
-
-  useEffect(() => {
-    const newDays = Object.entries(days)
-      .filter((item) => item[1] === true)
-      .reduce((sum, [day]) => sum + daysValues[day], 0);
-    setItem({
-      ...item,
-      days: newDays,
-    });
-  }, [days]);
 
   const updateDe = (newde) => {
     setDe(dayjs(newde));
@@ -136,11 +114,62 @@ const SchedulePage = () => {
     });
   };
 
+  const updateStart = (newstart) => {
+    setStart(dayjs(newstart));
+    setItem({
+      ...item,
+      start: `${newstart.hour().toString().padStart(2, '0')}:${newstart.minute().toString().padStart(2, '0')}`,
+    });
+  };
+
+  useEffect(() => {
+    const initialDaysState = {
+      lunes: binaryString.charAt(6) === '1',
+      martes: binaryString.charAt(5) === '1',
+      miercoles: binaryString.charAt(4) === '1',
+      jueves: binaryString.charAt(3) === '1',
+      viernes: binaryString.charAt(2) === '1',
+      sabado: binaryString.charAt(1) === '1',
+      domingo: binaryString.charAt(0) === '1',
+    };
+    setDays(initialDaysState);
+    setDe(dayjs(newDateDe));
+    setA(dayjs(newDateA));
+    setStart(dayjs(newDateStart));
+    fetch('/api/subroutes')
+      .then((response) => response.json())
+      .then((data) => setSubrutas(data));
+    setSubruta(item?.subrouteId);
+    fetch('/api/geofences')
+      .then((response) => response.json())
+      .then((data) => setGeofences(data));
+    setGeofence(item?.geofenceId ?? 0);
+    console.log(item);
+  }, [item?.id]);
+
+  useEffect(() => {
+    const newDays = Object.entries(days)
+      .filter((item) => item[1] === true)
+      .reduce((sum, [day]) => sum + daysValues[day], 0);
+    setItem({
+      ...item,
+      days: newDays,
+    });
+  }, [days]);
+
   const updateSubruta = (evt) => {
     setSubruta(evt.target.value);
     setItem({
       ...item,
       subrouteId: evt.target.value,
+    });
+  };
+
+  const updateGeocerca = (evt) => {
+    setGeofence(evt.target.value);
+    setItem({
+      ...item,
+      geofenceId: evt.target.value,
     });
   };
 
@@ -256,10 +285,35 @@ const SchedulePage = () => {
                 )}
               </Select>
             </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="geofence">{t('geofences')}</InputLabel>
+              <Select
+                labelId="geofenceid-label"
+                id="geofenceid"
+                value={geofence ?? 0}
+                label={t('geofences')}
+                onChange={updateGeocerca}
+              >
+                {geofences && (
+                  geofences.map((s) => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)
+                )}
+              </Select>
+            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['TimePicker', 'TimePicker']}>
+                <DemoItem>
+                  <TimePicker
+                    label={t('reportStartTime')}
+                    value={start}
+                    onChange={(newValue) => updateStart(newValue)}
+                  />
+                </DemoItem>
+
+              </DemoContainer>
+            </LocalizationProvider>
           </AccordionDetails>
         </Accordion>
       )}
-
     </EditItemView>
   );
 };

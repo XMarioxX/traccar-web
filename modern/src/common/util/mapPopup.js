@@ -1,8 +1,9 @@
-import { attsGetter, specialAtts, valueParser } from './utils';
-
-function isMobileDevice() {
-  return /Mobi|Android/i.test(navigator.userAgent);
-}
+import {
+  attsGetter,
+  isMobile,
+  specialAtts,
+  valueParser,
+} from './utils';
 
 window.makeRequest = async (url, method = 'GET', payload = null) => {
   const options = {
@@ -35,8 +36,8 @@ window.engineLock = () => {
     theme: '#163b61',
     content: '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><button id="myButton" style="background-color: #2196f3; color: #ffffff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Apagar</button></div>',
     contentSize: {
-      width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.1),
-      height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.1),
+      width: window.innerWidth * (isMobile() ? 0.4 : 0.1),
+      height: window.innerHeight * (isMobile() ? 0.1 : 0.1),
     },
     headerTitle: 'Apagar',
     headerControls: {
@@ -62,8 +63,8 @@ window.engineReactivate = () => {
     theme: '#163b61',
     content: '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><button id="myButton" style="background-color: #2196f3; color: #ffffff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Reactivar</button></div>',
     contentSize: {
-      width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.1),
-      height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.1),
+      width: window.innerWidth * (isMobile() ? 0.4 : 0.1),
+      height: window.innerHeight * (isMobile() ? 0.1 : 0.1),
     },
     headerTitle: 'Reactivar',
     headerControls: {
@@ -171,8 +172,8 @@ export const streetView = () => {
       },
       content: `<iframe src="./VistaCalle.html?lat=${window.position.latitude}&lng=${window.position.longitude}" style="position:relative; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">Your browser doesnt support iframes</iframe>`,
       contentSize: {
-        width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.6),
-        height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.6),
+        width: window.innerWidth * (isMobile() ? 0.9 : 0.6),
+        height: window.innerHeight * (isMobile() ? 0.8 : 0.6),
       },
       headerTitle: 'Vista de calle',
       headerControls: {

@@ -221,42 +221,25 @@ const getDevice = (deviceId) => {
 export const specialAtts = (obj, attribute) => {
   switch (obj.protocol) {
     case 'ruptela':
-    {
       switch (attribute) {
         case 'ignition':
-        {
           return 'io409';
-        }
         case 'motion':
-        {
           return 'motion';
-        }
         case 'odometer':
-        {
           return 'io65';
-        }
         default:
-        {
           return attribute;
-        }
       }
-    }
-    case 'teltonika': {
+    case 'teltonika':
       switch (attribute) {
         case 'bateria':
-        {
           return 'io113';
-        }
         default:
-        {
           return attribute;
-        }
       }
-    }
     default:
-    {
       return attribute;
-    }
   }
 };
 export const attsGetter = (obj, attribute) => {
@@ -285,9 +268,8 @@ export const attsGetter = (obj, attribute) => {
       const temperature = attsGetter(obj, 'temp1') !== '' ? attsGetter(obj, 'temp1') : attsGetter(obj);
       return temperature;
     }
-    case 'name': {
+    case 'name':
       return getDevice(obj.deviceId).name;
-    }
     case 'ignition': {
       const motion = attsGetter(obj, 'motion');
       const value = (obj.ignition ? obj.ignition : (obj.attributes[attribute] !== undefined ? obj.attributes[attribute] : (obj.attributes[`attribute.${attribute}`] ? obj.attributes[`attribute.${attribute}`] : null)));
@@ -367,78 +349,43 @@ export const valueParser = (obj, value) => {
   // eslint-disable-next-line default-case
   switch (value) {
     case 'name':
-    {
       return `<h3><b>${attsGetter(obj, value)}</b></h3>`;
-    }
     case 'ignition':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Encendido:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'io409':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Encendido:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'motion':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Movimiento:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'io173':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Movimiento:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'dateTime':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Fecha:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'fixTime':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Fecha:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'status':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Estado:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'speed':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Velocidad:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'address':
-    {
       return `<div id='pop-up-address'><b style='font-weight: bold;text-transform: uppercase;'>Dirección:</b> ${attsGetter(obj, 'address')}</div>`;
-    }
     case 'attribute.fuel':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Combustible:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'attribute.hours':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Horas:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'attribute.totalDistance':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Distancia total :</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'temperaturaC':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Temperatura °C:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'temperaturaF':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Temperatura °F:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'temp2':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Temperatura °C:</b> ${attsGetter(obj, value)}<br>`;
-    }
     case 'bateria':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Nivel de bateria:</b> ${attsGetter(obj, specialAtts(obj, value))}%<br>`;
-    }
-
     case 'lastAlarm':
-    {
       return `<b style="font-weight: bold;text-transform: uppercase;">Ultima alarma:</b> ${attsGetter(obj, value)}<br>`;
-    }
   }
   return '';
 };
+
+export const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
