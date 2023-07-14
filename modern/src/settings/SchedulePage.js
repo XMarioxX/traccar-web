@@ -45,24 +45,13 @@ const SchedulePage = () => {
     domingo: 64,
   };
 
-  const newDateDe = new Date();
-  const newDateA = new Date();
   const newDateStart = new Date();
-
   const [item, setItem] = useState();
-  const [hoursDe, minutesDe] = ((item?.de) || '00:00').split(':');
-  const [hoursA, minutesA] = ((item?.a) || '00:00').split(':');
   const [hoursStart, minutesStart] = ((item?.start) || '00:00').split(':');
-  newDateDe.setHours(hoursDe);
-  newDateDe.setMinutes(minutesDe);
-  newDateA.setHours(hoursA);
-  newDateA.setMinutes(minutesA);
   newDateStart.setHours(hoursStart);
   newDateStart.setMinutes(minutesStart);
-  const [de, setDe] = useState(dayjs(newDateDe));
-  const [a, setA] = useState(dayjs(newDateA));
-  const [start, setStart] = useState(dayjs(newDateStart));
 
+  const [start, setStart] = useState(dayjs(newDateStart));
   const binaryString = (item?.days ?? 0).toString(2).padStart(7, '0'); // Convert to binary and pad with leading zeros
 
   const [days, setDays] = useState({
@@ -98,22 +87,6 @@ const SchedulePage = () => {
     setDays(newDays);
   };
 
-  const updateDe = (newde) => {
-    setDe(dayjs(newde));
-    setItem({
-      ...item,
-      de: `${newde.hour().toString().padStart(2, '0')}:${newde.minute().toString().padStart(2, '0')}`,
-    });
-  };
-
-  const updateTo = (newto) => {
-    setA(dayjs(newto));
-    setItem({
-      ...item,
-      a: `${newto.hour().toString().padStart(2, '0')}:${newto.minute().toString().padStart(2, '0')}`,
-    });
-  };
-
   const updateStart = (newstart) => {
     setStart(dayjs(newstart));
     setItem({
@@ -133,8 +106,6 @@ const SchedulePage = () => {
       domingo: binaryString.charAt(0) === '1',
     };
     setDays(initialDaysState);
-    setDe(dayjs(newDateDe));
-    setA(dayjs(newDateA));
     setStart(dayjs(newDateStart));
     fetch('/api/subroutes')
       .then((response) => response.json())
@@ -181,7 +152,7 @@ const SchedulePage = () => {
     }
   });
 
-  const validate = () => item && item.name && item.days && item.de && item.a && item.subrouteId;
+  const validate = () => item && item.name && item.days && item.subrouteId;
   return (
     <EditItemView
       endpoint="itinerarios"
@@ -252,24 +223,6 @@ const SchedulePage = () => {
                 />
               </FormGroup>
             </FormControl>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['TimePicker', 'TimePicker']}>
-                <DemoItem>
-                  <TimePicker
-                    label={t('reportFrom')}
-                    value={de}
-                    onChange={(newValue) => updateDe(newValue)}
-                  />
-                </DemoItem>
-                <DemoItem>
-                  <TimePicker
-                    label={t('reportTo')}
-                    value={a}
-                    onChange={(newValue) => updateTo(newValue)}
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider>
             <FormControl fullWidth>
               <InputLabel id="subroute">{t('subroutes')}</InputLabel>
               <Select
