@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Popup } from 'maplibre-gl';
 import {
@@ -17,6 +13,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
+import DeviceListTransport from './DeviceListTransport';
 import BottomMenu from '../common/components/BottomMenu';
 // import StatusCard from '../common/components/StatusCard';
 // import { devicesActions } from '../store';
@@ -26,7 +23,11 @@ import useFilter from './useFilter';
 import MainToolbar from './MainToolbar';
 import MainMap from './MainMap';
 import { useAttributePreference } from '../common/util/preferences';
-import { createPopUp, streetView, generateRoute } from '../common/util/mapPopup';
+import {
+  createPopUp,
+  streetView,
+  generateRoute,
+} from '../common/util/mapPopup';
 import { map } from '../map/core/MapView';
 
 const style = {
@@ -98,8 +99,11 @@ const MainPage = () => {
 
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
+  const user = useSelector((state) => state.session.user);
   const [filteredPositions, setFilteredPositions] = useState([]);
-  const selectedPosition = filteredPositions.find((position) => selectedDeviceId && position.deviceId === selectedDeviceId);
+  const selectedPosition = filteredPositions.find(
+    (position) => selectedDeviceId && position.deviceId === selectedDeviceId,
+  );
 
   const [filteredDevices, setFilteredDevices] = useState([]);
 
@@ -125,7 +129,15 @@ const MainPage = () => {
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
 
-  useFilter(keyword, filter, filterSort, filterMap, positions, setFilteredDevices, setFilteredPositions);
+  useFilter(
+    keyword,
+    filter,
+    filterSort,
+    filterMap,
+    positions,
+    setFilteredDevices,
+    setFilteredPositions,
+  );
 
   if (selectedPosition) {
     Array.from(document.getElementsByClassName('mapboxgl-popup')).map((item) => item.remove());
@@ -188,13 +200,14 @@ const MainPage = () => {
               />
             </div>
           )}
-          <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
-            {/* {
-              user.attributes.transporte? <DeviceListTransporte devices={filteredDevices} />:<DeviceList devices={filteredDevices} />
-            } */}
-            <DeviceList devices={filteredDevices} />
+          <Paper
+            square
+            className={classes.contentList}
+            style={devicesOpen ? {} : { visibility: 'hidden' }}
+          >
+            {user.attributes.hasOwnProperty('Transporte') &&
+            user.attributes.Transporte ? (<DeviceListTransport devices={filteredDevices} />) : (<DeviceList devices={filteredDevices} />)}
           </Paper>
-
         </div>
         {desktop && (
           <div className={classes.footer}>
