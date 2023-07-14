@@ -101,8 +101,6 @@ const GroupPage = () => {
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="subtitle1">
               {t('subroutes')}
-              {' '}
-              extra
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
