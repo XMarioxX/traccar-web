@@ -44,6 +44,7 @@ const MainToolbar = ({
   const theme = useTheme();
   const navigate = useNavigate();
   const t = useTranslation();
+  const user = useSelector((state) => state.session.user);
 
   const deviceReadonly = useDeviceReadonly();
 
@@ -64,7 +65,8 @@ const MainToolbar = ({
       </IconButton>
       <OutlinedInput
         ref={inputRef}
-        placeholder={t('sharedSearchDevices')}
+        placeholder={user.attributes.hasOwnProperty('Transporte') &&
+        user.attributes.Transporte ? t('sharedSearchDevicesTransport') : t('sharedSearchDevices')}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         onFocus={() => setDevicesAnchorEl(toolbarRef.current)}
