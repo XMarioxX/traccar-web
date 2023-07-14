@@ -13,7 +13,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import TodayIcon from '@mui/icons-material/Today';
 import PublishIcon from '@mui/icons-material/Publish';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
-import { ScheduleOutlined } from '@mui/icons-material';
+import { ScheduleOutlined, SegmentOutlined } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
@@ -90,6 +90,12 @@ const SettingsMenu = () => {
               link="/settings/schedules"
               icon={<ScheduleOutlined />}
               selected={location.pathname.startsWith('/settings/schedule')}
+            />
+            <MenuItem
+              title={t('settingsSections')}
+              link="/settings/sections"
+              icon={<SegmentOutlined />}
+              selected={location.pathname.startsWith('/settings/section')}
             />
             {!features.disableDrivers && (
               <MenuItem

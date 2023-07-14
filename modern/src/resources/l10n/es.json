@@ -574,5 +574,10 @@
     "maintenancePeriod": "Período",
     "subroutes": "Subrutas",
     "settingsSchedules": "Itinerarios",
-    "scheduleDialog": "Itinerario"
+    "scheduleDialog": "Itinerario",
+    "settingsSections": "Tramos",
+    "sectionDialog": "Tramo",
+    "minTime": "Tiempo minimo",
+    "maxTime": "Tiempo maximo",
+    "punishment": "Castigo"
 }

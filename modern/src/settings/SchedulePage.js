@@ -45,19 +45,13 @@ const SchedulePage = () => {
     domingo: 64,
   };
 
-  const newDateDe = new Date();
-  const newDateA = new Date();
-
+  const newDateStart = new Date();
   const [item, setItem] = useState();
-  const [hoursDe, minutesDe] = ((item?.de) || '00:00').split(':');
-  const [hoursA, minutesA] = ((item?.a) || '00:00').split(':');
-  newDateDe.setHours(hoursDe);
-  newDateDe.setMinutes(minutesDe);
-  newDateA.setHours(hoursA);
-  newDateA.setMinutes(minutesA);
-  const [de, setDe] = useState(dayjs(newDateDe));
-  const [a, setA] = useState(dayjs(newDateA));
+  const [hoursStart, minutesStart] = ((item?.start) || '00:00').split(':');
+  newDateStart.setHours(hoursStart);
+  newDateStart.setMinutes(minutesStart);
 
+  const [start, setStart] = useState(dayjs(newDateStart));
   const binaryString = (item?.days ?? 0).toString(2).padStart(7, '0'); // Convert to binary and pad with leading zeros
 
   const [days, setDays] = useState({
@@ -80,8 +74,10 @@ const SchedulePage = () => {
     domingo,
   } = days;
 
-  const [subrutas, setSubrutas] = useState([{ id: 0, name: 'Elegir' }]);
+  const [subrutas, setSubrutas] = useState([]);
   const [subruta, setSubruta] = useState(0);
+  const [geofences, setGeofences] = useState([]);
+  const [geofence, setGeofence] = useState(0);
 
   const handleChange = (event) => {
     const newDays = {
@@ -89,6 +85,14 @@ const SchedulePage = () => {
       [event.target.name]: event.target.checked,
     };
     setDays(newDays);
+  };
+
+  const updateStart = (newstart) => {
+    setStart(dayjs(newstart));
+    setItem({
+      ...item,
+      start: `${newstart.hour().toString().padStart(2, '0')}:${newstart.minute().toString().padStart(2, '0')}`,
+    });
   };
 
   useEffect(() => {
@@ -102,13 +106,15 @@ const SchedulePage = () => {
       domingo: binaryString.charAt(0) === '1',
     };
     setDays(initialDaysState);
-    setDe(dayjs(newDateDe));
-    setA(dayjs(newDateA));
+    setStart(dayjs(newDateStart));
     fetch('/api/subroutes')
       .then((response) => response.json())
       .then((data) => setSubrutas(data));
-    console.log(subrutas);
     setSubruta(item?.subrouteId);
+    fetch('/api/geofences')
+      .then((response) => response.json())
+      .then((data) => setGeofences(data));
+    setGeofence(item?.geofenceId ?? 0);
   }, [item?.id]);
 
   useEffect(() => {
@@ -121,28 +127,19 @@ const SchedulePage = () => {
     });
   }, [days]);
 
-  const updateDe = (newde) => {
-    setDe(dayjs(newde));
-    setItem({
-      ...item,
-      de: `${newde.hour().toString().padStart(2, '0')}:${newde.minute().toString().padStart(2, '0')}`,
-    });
-  };
-
-  const updateTo = (newto) => {
-    setA(dayjs(newto));
-    setItem({
-      ...item,
-      a: `${newto.hour().toString().padStart(2, '0')}:${newto.minute().toString().padStart(2, '0')}`,
-    });
-  };
-
   const updateSubruta = (evt) => {
-    console.log(evt);
     setSubruta(evt.target.value);
     setItem({
       ...item,
       subrouteId: evt.target.value,
+    });
+  };
+
+  const updateGeocerca = (evt) => {
+    setGeofence(evt.target.value);
+    setItem({
+      ...item,
+      geofenceId: evt.target.value,
     });
   };
 
@@ -155,8 +152,7 @@ const SchedulePage = () => {
     }
   });
 
-  const validate = () => item && item.name && item.days && item.de && item.a && item.subrouteId;
-  console.log(validate);
+  const validate = () => item && item.name && item.days && item.subrouteId;
   return (
     <EditItemView
       endpoint="itinerarios"
@@ -227,24 +223,6 @@ const SchedulePage = () => {
                 />
               </FormGroup>
             </FormControl>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['TimePicker', 'TimePicker']}>
-                <DemoItem>
-                  <TimePicker
-                    label={t('reportFrom')}
-                    value={de}
-                    onChange={(newValue) => updateDe(newValue)}
-                  />
-                </DemoItem>
-                <DemoItem>
-                  <TimePicker
-                    label={t('reportTo')}
-                    value={a}
-                    onChange={(newValue) => updateTo(newValue)}
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider>
             <FormControl fullWidth>
               <InputLabel id="subroute">{t('subroutes')}</InputLabel>
               <Select
@@ -259,10 +237,35 @@ const SchedulePage = () => {
                 )}
               </Select>
             </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="geofence">{t('geofences')}</InputLabel>
+              <Select
+                labelId="geofenceid-label"
+                id="geofenceid"
+                value={geofence ?? 0}
+                label={t('geofences')}
+                onChange={updateGeocerca}
+              >
+                {geofences && (
+                  geofences.map((s) => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)
+                )}
+              </Select>
+            </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['TimePicker', 'TimePicker']}>
+                <DemoItem>
+                  <TimePicker
+                    label={t('reportStartTime')}
+                    value={start}
+                    onChange={(newValue) => updateStart(newValue)}
+                  />
+                </DemoItem>
+
+              </DemoContainer>
+            </LocalizationProvider>
           </AccordionDetails>
         </Accordion>
       )}
-
     </EditItemView>
   );
 };

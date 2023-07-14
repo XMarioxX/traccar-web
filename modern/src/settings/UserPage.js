@@ -105,8 +105,6 @@ const UserPage = () => {
     }
   };
 
-  console.log(item);
-
   const validate = () => item && item.name && item.email && (item.id || item.password);
 
   return (

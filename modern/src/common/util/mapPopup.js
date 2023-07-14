@@ -1,8 +1,9 @@
-import { attsGetter, specialAtts, valueParser } from './utils';
-
-function isMobileDevice() {
-  return /Mobi|Android/i.test(navigator.userAgent);
-}
+import {
+  attsGetter,
+  isMobile,
+  specialAtts,
+  valueParser,
+} from './utils';
 
 window.makeRequest = async (url, method = 'GET', payload = null) => {
   const options = {
@@ -15,24 +16,19 @@ window.makeRequest = async (url, method = 'GET', payload = null) => {
     options.body = JSON.stringify(payload);
   }
 
-  try {
-    const response = await fetch(url, options);
+  const response = await fetch(url, options);
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    if (response.status === 204) {
-      // No content to parse
-      return null;
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
   }
+
+  if (response.status === 204) {
+    // No content to parse
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
 };
 
 window.engineLock = () => {
@@ -40,8 +36,8 @@ window.engineLock = () => {
     theme: '#163b61',
     content: '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><button id="myButton" style="background-color: #2196f3; color: #ffffff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Apagar</button></div>',
     contentSize: {
-      width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.1),
-      height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.1),
+      width: window.innerWidth * (isMobile() ? 0.4 : 0.1),
+      height: window.innerHeight * (isMobile() ? 0.1 : 0.1),
     },
     headerTitle: 'Apagar',
     headerControls: {
@@ -50,14 +46,12 @@ window.engineLock = () => {
       maximize: 'remove',
     },
     callback: (panel) => {
-      console.log(panel);
       document.getElementById('myButton').addEventListener('click', async () => {
-        const res = await window.makeRequest('./api/commands/send', 'POST', {
+        await window.makeRequest('./api/commands/send', 'POST', {
           type: 'engineStop',
           attributes: {},
           deviceId: window.position.deviceId,
         });
-        console.log(res);
         panel.close();
       });
     },
@@ -69,8 +63,8 @@ window.engineReactivate = () => {
     theme: '#163b61',
     content: '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><button id="myButton" style="background-color: #2196f3; color: #ffffff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Reactivar</button></div>',
     contentSize: {
-      width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.1),
-      height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.1),
+      width: window.innerWidth * (isMobile() ? 0.4 : 0.1),
+      height: window.innerHeight * (isMobile() ? 0.1 : 0.1),
     },
     headerTitle: 'Reactivar',
     headerControls: {
@@ -79,10 +73,8 @@ window.engineReactivate = () => {
       maximize: 'remove',
     },
     callback: (panel) => {
-      console.log(panel);
-
       document.getElementById('myButton').addEventListener('click', async () => {
-        const res = await window.makeRequest('./api/commands/send', 'POST', {
+        await window.makeRequest('./api/commands/send', 'POST', {
           id: 0,
           attributes: {},
           deviceId: window.position.deviceId,
@@ -90,7 +82,6 @@ window.engineReactivate = () => {
           textChannel: false,
           description: null,
         });
-        console.log(res);
         panel.close();
       });
     },
@@ -109,7 +100,6 @@ export const generateRoute = () => {
 
 export const test = () => { generateRoute(); };
 export const createPopUp = (position) => {
-  console.log(position);
   let html = '';
   html += "<div align='center' style='text-align: center !important;text-transform: uppercase !important;'>";
   //   if (!Traccar.app.getUser().get('attributes').hasOwnProperty('ui.disableReport') || !Traccar.app.getUser().get('attributes')['ui.disableReport']) {
@@ -175,15 +165,15 @@ export const createPopUp = (position) => {
 
 export const streetView = () => {
   if (window.position.latitude != null && window.position.longitude != null) {
-    const streetviewPanel = window.jsPanel.create({
+    window.jsPanel.create({
       theme: {
         colorHeader: '#fff',
         bgPanel: 'rgb(49,80,126)',
       },
       content: `<iframe src="./VistaCalle.html?lat=${window.position.latitude}&lng=${window.position.longitude}" style="position:relative; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">Your browser doesnt support iframes</iframe>`,
       contentSize: {
-        width: window.innerWidth * (isMobileDevice() ? 0.9 : 0.6),
-        height: window.innerHeight * (isMobileDevice() ? 0.8 : 0.6),
+        width: window.innerWidth * (isMobile() ? 0.9 : 0.6),
+        height: window.innerHeight * (isMobile() ? 0.8 : 0.6),
       },
       headerTitle: 'Vista de calle',
       headerControls: {
@@ -192,9 +182,5 @@ export const streetView = () => {
       },
       top: '56px',
     });
-    if (isMobileDevice()) {
-      // streetviewPanel.maximize();
-      console.log(streetviewPanel);
-    }
   }
 };

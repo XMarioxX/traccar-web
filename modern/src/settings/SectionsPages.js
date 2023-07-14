@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   Table, TableRow, TableCell, TableHead, TableBody,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import LinkIcon from '@mui/icons-material/Link';
 import makeStyles from '@mui/styles/makeStyles';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -21,9 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SchedulesPage = () => {
+const SectionsPage = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const t = useTranslation();
 
   const [timestamp, setTimestamp] = useState(Date.now());
@@ -34,7 +31,7 @@ const SchedulesPage = () => {
   useEffectAsync(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/itinerarios');
+      const response = await fetch('/api/tramos');
       if (response.ok) {
         setItems(await response.json());
       } else {
@@ -45,15 +42,8 @@ const SchedulesPage = () => {
     }
   }, [timestamp]);
 
-  const actionConnections = {
-    key: 'connections',
-    title: t('sharedConnections'),
-    icon: <LinkIcon fontSize="small" />,
-    handler: (itinerarioId) => navigate(`/settings/schedule/${itinerarioId}/connections`),
-  };
-
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'settingsSchedules']}>
+    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'settingsSections']}>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -69,19 +59,18 @@ const SchedulesPage = () => {
               <TableCell className={classes.columnAction} padding="none">
                 <CollectionActions
                   itemId={item.id}
-                  editPath="/settings/schedule"
-                  endpoint="itinerarios"
+                  editPath="/settings/section"
+                  endpoint="tramos"
                   setTimestamp={setTimestamp}
-                  customActions={[actionConnections]}
                 />
               </TableCell>
             </TableRow>
           )) : (<TableShimmer columns={2} endAction />)}
         </TableBody>
       </Table>
-      <CollectionFab editPath="/settings/schedule" />
+      <CollectionFab editPath="/settings/section" />
     </PageLayout>
   );
 };
 
-export default SchedulesPage;
+export default SectionsPage;

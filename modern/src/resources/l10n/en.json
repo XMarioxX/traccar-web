@@ -574,5 +574,10 @@
     "maintenancePeriod": "Period",
     "subroutes": "Subroutes",
     "settingsSchedules": "Schedules",
-    "scheduleDialog": "Schedule"
+    "scheduleDialog": "Schedule",
+    "settingsSections": "Sections",
+    "sectionDialog": "Section",
+    "minTime": "Min. time",
+    "maxTime": "Max time",
+    "punishment": "Punishment"
 }

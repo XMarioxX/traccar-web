@@ -2,7 +2,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Popup } from 'maplibre-gl';
-import { Box, Modal, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Modal,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -10,8 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
 import DeviceListTransport from './DeviceListTransport';
 import BottomMenu from '../common/components/BottomMenu';
-import StatusCard from '../common/components/StatusCard';
-import { devicesActions } from '../store';
+// import StatusCard from '../common/components/StatusCard';
+// import { devicesActions } from '../store';
 import usePersistedState from '../common/util/usePersistedState';
 import EventsDrawer from './EventsDrawer';
 import useFilter from './useFilter';
