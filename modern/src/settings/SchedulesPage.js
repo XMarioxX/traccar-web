@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import {
   Table, TableRow, TableCell, TableHead, TableBody,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import LinkIcon from '@mui/icons-material/Link';
 import makeStyles from '@mui/styles/makeStyles';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SchedulesPage = () => {
   const classes = useStyles();
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   const t = useTranslation();
 
   const [timestamp, setTimestamp] = useState(Date.now());
@@ -44,6 +45,13 @@ const SchedulesPage = () => {
     }
   }, [timestamp]);
 
+  const actionConnections = {
+    key: 'connections',
+    title: t('sharedConnections'),
+    icon: <LinkIcon fontSize="small" />,
+    handler: (itinerarioId) => navigate(`/settings/schedule/${itinerarioId}/connections`),
+  };
+
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'settingsSchedules']}>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
@@ -64,6 +72,7 @@ const SchedulesPage = () => {
                   editPath="/settings/schedule"
                   endpoint="itinerarios"
                   setTimestamp={setTimestamp}
+                  customActions={[actionConnections]}
                 />
               </TableCell>
             </TableRow>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import {
   Accordion, AccordionSummary, AccordionDetails, Typography, FormControl, InputLabel, Select, MenuItem,
@@ -25,6 +25,7 @@ const SectionPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
+  const user = useSelector((state) => state.session.user);
 
   const [item, setItem] = useState();
   const [geofences, setGeofences] = useState([]);
@@ -44,7 +45,6 @@ const SectionPage = () => {
       .then((response) => response.json())
       .then((data) => setGeofences(data));
     setGeofence(item?.geofenceId ?? 0);
-    console.log(item);
   }, [item?.id]);
 
   const updateGeocerca = (evt) => {
@@ -68,7 +68,6 @@ const SectionPage = () => {
   };
 
   const validate = () => item && item.name && item.minTime && item.maxTime && item.punishment && item.geofenceId && item.minTime <= item.maxTime;
-  console.log(item);
 
   return (
     <EditItemView
@@ -80,8 +79,8 @@ const SectionPage = () => {
       menu={<SettingsMenu />}
       breadcrumbs={['settingsTitle', 'sectionDialog']}
     >
+      <div>{JSON.stringify(user.attributes.Transporte)}</div>
       {item && (
-
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="subtitle1">

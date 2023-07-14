@@ -144,7 +144,6 @@ const SchedulePage = () => {
       .then((response) => response.json())
       .then((data) => setGeofences(data));
     setGeofence(item?.geofenceId ?? 0);
-    console.log(item);
   }, [item?.id]);
 
   useEffect(() => {

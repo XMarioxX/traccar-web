@@ -189,6 +189,9 @@ const MainPage = () => {
             </div>
           )}
           <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
+            {/* {
+              user.attributes.transporte? <DeviceListTransporte devices={filteredDevices} />:<DeviceList devices={filteredDevices} />
+            } */}
             <DeviceList devices={filteredDevices} />
           </Paper>
 
