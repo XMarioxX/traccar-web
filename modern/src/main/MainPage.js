@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Popup } from 'maplibre-gl';
@@ -11,7 +10,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
 import DeviceListTransport from './DeviceListTransport';
 import BottomMenu from '../common/components/BottomMenu';
@@ -90,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 const MainPage = () => {
   const navigate = useNavigate();
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const theme = useTheme();
 
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
@@ -118,7 +117,7 @@ const MainPage = () => {
   const [devicesOpen, setDevicesOpen] = useState(desktop);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);

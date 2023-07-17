@@ -3,32 +3,20 @@ import { React, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
-  IconButton,
-  Tooltip,
   ListItemText,
   ListItemButton,
 } from '@mui/material';
 import Collapse from 'react-collapse';
-import BatteryFullIcon from '@mui/icons-material/BatteryFull';
-import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
-import Battery60Icon from '@mui/icons-material/Battery60';
-import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60';
-import Battery20Icon from '@mui/icons-material/Battery20';
-import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
-import ErrorIcon from '@mui/icons-material/Error';
 import moment from 'moment';
 import { devicesActions } from '../store';
 import {
-  formatAlarm,
-  formatBoolean,
-  formatPercentage,
   formatStatus,
   getStatusColor,
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAdministrator } from '../common/util/permissions';
-import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
+import TableExist from './components/TableExits';
 
 // import { map } from '../map/core/MapView';
 
@@ -55,15 +43,10 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: theme.palette.colors.neutral,
   },
+  collapse: {
+    padding: '1rem',
+  },
 }));
-
-const styleCollapse = {
-  'max-width': '800px',
-  border: '1px solid rgba(3, 169, 244, 0.3)',
-  'border-radius': '10px',
-  'background-color': 'rgba(100, 255, 100, 0.1)',
-  transition: 'height 500ms',
-};
 
 const DeviceRowTransporte = ({ data, index, style }) => {
   const classes = useStyles();
@@ -73,11 +56,11 @@ const DeviceRowTransporte = ({ data, index, style }) => {
   const admin = useAdministrator();
 
   const item = data[index];
-  const position = useSelector((state) => state.session.positions[item.id]);
 
   const geofences = useSelector((state) => state.geofences.items);
 
   const [isOpened, setIsOpen] = useState(false);
+  const [, setInfo] = useState({});
 
   const devicePrimary = useAttributePreference('devicePrimary', 'name');
   const deviceSecondary = useAttributePreference('deviceSecondary', '');
@@ -110,6 +93,10 @@ const DeviceRowTransporte = ({ data, index, style }) => {
     );
   };
 
+  const handleLoadInfo = (infoChild) => {
+    setInfo(infoChild);
+  };
+
   return (
     <div style={style}>
       <ListItemButton
@@ -126,94 +113,9 @@ const DeviceRowTransporte = ({ data, index, style }) => {
           secondary={secondaryText()}
           secondaryTypographyProps={{ noWrap: true }}
         />
-        {position && (
-          <>
-            {position.attributes.hasOwnProperty('alarm') && (
-              <Tooltip
-                title={`${t('eventAlarm')}: ${formatAlarm(
-                  position.attributes.alarm,
-                  t,
-                )}`}
-              >
-                <IconButton size="small">
-                  <ErrorIcon fontSize="small" className={classes.negative} />
-                </IconButton>
-              </Tooltip>
-            )}
-            {position.attributes.hasOwnProperty('ignition') && (
-              <Tooltip
-                title={`${t('positionIgnition')}: ${formatBoolean(
-                  position.attributes.ignition,
-                  t,
-                )}`}
-              >
-                <IconButton size="small">
-                  {position.attributes.ignition ? (
-                    <EngineIcon
-                      width={20}
-                      height={20}
-                      className={classes.positive}
-                    />
-                  ) : (
-                    <EngineIcon
-                      width={20}
-                      height={20}
-                      className={classes.neutral}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-            {position.attributes.hasOwnProperty('batteryLevel') && (
-              <Tooltip
-                title={`${t('positionBatteryLevel')}: ${formatPercentage(
-                  position.attributes.batteryLevel,
-                )}`}
-              >
-                <IconButton size="small">
-                  {position.attributes.batteryLevel > 70 ? (
-                    position.attributes.charge ? (
-                      <BatteryChargingFullIcon
-                        fontSize="small"
-                        className={classes.positive}
-                      />
-                    ) : (
-                      <BatteryFullIcon
-                        fontSize="small"
-                        className={classes.positive}
-                      />
-                    )
-                  ) : position.attributes.batteryLevel > 30 ? (
-                    position.attributes.charge ? (
-                      <BatteryCharging60Icon
-                        fontSize="small"
-                        className={classes.medium}
-                      />
-                    ) : (
-                      <Battery60Icon
-                        fontSize="small"
-                        className={classes.medium}
-                      />
-                    )
-                  ) : position.attributes.charge ? (
-                    <BatteryCharging20Icon
-                      fontSize="small"
-                      className={classes.negative}
-                    />
-                  ) : (
-                    <Battery20Icon
-                      fontSize="small"
-                      className={classes.negative}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
       </ListItemButton>
-      <Collapse isOpened={isOpened} style={styleCollapse}>
-        <div className="text">Hola Mundo</div>
+      <Collapse isOpened={isOpened}>
+        <div className="text" style={{ padding: '1rem' }}><TableExist deviceId={item.id} handleLoadInfo={handleLoadInfo} /></div>
       </Collapse>
     </div>
   );
